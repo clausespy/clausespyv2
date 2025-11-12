@@ -1,0 +1,25 @@
+'''
+<!-- templates/upload.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Contract - ClauseSpy</title>
+    <!-- Link to your CSS for consistent styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Upload Your Contract</h1>
+    </header>
+    <main>
+        <p>Select a file to have it analyzed by the ClauseSpy AI.</p>
+        <form method="post" enctype="multipart/form-data">
+          <input type="file" name="file" required>
+          <button type="submit">Upload and Analyze</button>
+        </form>
+    </main>
+</body>
+</html>
+'''
