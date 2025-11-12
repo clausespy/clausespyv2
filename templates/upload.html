@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,32 +7,63 @@
     <title>ClauseSpy - Upload Document</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: #f8f9fa;
         }
         .upload-container {
             text-align: center;
-            border: 2px dashed #ccc;
+            background-color: white;
             padding: 40px;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        input[type="file"] {
-            margin-bottom: 20px;
+        h2 {
+            margin-top: 0;
         }
-        input[type="submit"] {
+        /* Hide the default file input */
+        #file-upload {
+            display: none;
+        }
+        /* Style the custom button (the label) */
+        .file-upload-label {
+            display: inline-block;
             padding: 10px 20px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .file-upload-label:hover {
+            background-color: #e9e9e9;
+        }
+        #file-name {
+            color: #555;
+        }
+        /* Style the main upload/submit button */
+        #submit-button {
+            padding: 12px 24px;
             border: none;
             background-color: #007bff;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: background-color 0.2s;
         }
-        input[type="submit"]:hover {
+        #submit-button:hover {
             background-color: #0056b3;
+        }
+        /* Style for the disabled state of the upload button */
+        #submit-button:disabled {
+            background-color: #a0cfff;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -41,15 +71,37 @@
 
     <div class="upload-container">
         <h2>Upload a Document for Analysis</h2>
-        <p> Select a PDF document from your device to begin the AI analysis. The system will extract the text and prepare it for review.</p>
+        <p>Select a PDF document from your device to begin the AI analysis.</p>
+        
         <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="file" accept=".pdf,.doc,.docx,.txt">
+            <!-- Custom-styled file input -->
+            <label for="file-upload" class="file-upload-label">Choose File</label>
+            <span id="file-name">No file selected</span>
+            <input type="file" name="file" id="file-upload" accept=".pdf">
+            
             <br>
-            <input type="submit" value="Upload">
+            
+            <!-- Submit button, initially disabled -->
+            <input type="submit" value="Upload" id="submit-button" disabled>
         </form>
     </div>
 
+    <script>
+        const fileInput = document.getElementById('file-upload');
+        const fileNameSpan = document.getElementById('file-name');
+        const submitButton = document.getElementById('submit-button');
+
+        fileInput.addEventListener('change', function() {
+            // When a file is chosen, update the text and enable the button
+            if (this.files.length > 0) {
+                fileNameSpan.textContent = this.files[0].name;
+                submitButton.disabled = false;
+            } else {
+                fileNameSpan.textContent = 'No file selected';
+                submitButton.disabled = true;
+            }
+        });
+    </script>
+
 </body>
 </html>
-
-
