@@ -5,21 +5,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Contract - ClauseSpy</title>
-    <!-- Link to your CSS for consistent styling -->
+    <!-- This links to your stylesheet for consistent design -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Upload Your Contract</h1>
-    </header>
-    <main>
-        <p>Select a file to have it analyzed by the ClauseSpy AI.</p>
+        <p>
+            Select a PDF document from your device to begin the AI analysis. The system will extract the text and prepare it for review.
+        </p>
+
+        <!-- The form action points to the same page, which is handled by the /upload route in Flask -->
         <form method="post" enctype="multipart/form-data">
-          <input type="file" name="file" required>
-          <button type="submit">Upload and Analyze</button>
+            <div style="margin-bottom: 2rem;">
+                <!-- 
+                  - 'accept=".pdf"' tells the browser to prefer PDF files, which should fix the greyed-out button.
+                  - A 'required' attribute ensures a file must be selected.
+                -->
+                <input type="file" name="file" accept=".pdf" required>
+            </div>
+            
+            <button type="submit" class="button">Upload and Analyze</button>
         </form>
-    </main>
+    </div>
 </body>
 </html>
 '''
