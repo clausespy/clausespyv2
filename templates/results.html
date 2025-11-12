@@ -1,0 +1,22 @@
+'''
+<!-- templates/results.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Results - ClauseSpy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Analysis for: {{ filename }}</h1>
+    </header>
+    <main>
+        <h2>Analysis Result:</h2>
+        <pre>{{ analysis_result }}</pre>
+        <a href="/upload">Analyze Another File</a>
+    </main>
+</body>
+</html>
+'''
