@@ -3,5 +3,5 @@ python-dotenv
 openai
 gunicorn
 PyPDF2
-
-
+python-docx
+werkzeug
