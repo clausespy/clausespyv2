@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,11 +24,9 @@
         h2 {
             margin-top: 0;
         }
-        /* Hide the default file input */
         #file-upload {
             display: none;
         }
-        /* Style the custom button (the label) */
         .file-upload-label {
             display: inline-block;
             padding: 10px 20px;
@@ -45,7 +42,6 @@
         #file-name {
             color: #555;
         }
-        /* Style the main upload/submit button */
         #submit-button {
             padding: 12px 24px;
             border: none;
@@ -60,7 +56,6 @@
         #submit-button:hover {
             background-color: #0056b3;
         }
-        /* Style for the disabled state of the upload button */
         #submit-button:disabled {
             background-color: #a0cfff;
             cursor: not-allowed;
@@ -74,14 +69,13 @@
         <p>Select a PDF document from your device to begin the AI analysis.</p>
         
         <form action="/upload" method="post" enctype="multipart/form-data">
-            <!-- Custom-styled file input -->
             <label for="file-upload" class="file-upload-label">Choose File</label>
             <span id="file-name">No file selected</span>
-            <input type="file" name="file" id="file-upload" accept=".pdf">
+            <!-- The 'accept' attribute is now more specific -->
+            <input type="file" name="file" id="file-upload" accept="application/pdf">
             
             <br>
             
-            <!-- Submit button, initially disabled -->
             <input type="submit" value="Upload" id="submit-button" disabled>
         </form>
     </div>
@@ -92,7 +86,6 @@
         const submitButton = document.getElementById('submit-button');
 
         fileInput.addEventListener('change', function() {
-            // When a file is chosen, update the text and enable the button
             if (this.files.length > 0) {
                 fileNameSpan.textContent = this.files[0].name;
                 submitButton.disabled = false;
