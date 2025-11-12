@@ -19,14 +19,7 @@
         </header>
 
         <main>
-            <h2>Unlock Clarity in Your Contracts, Instantly</h2>
-            <p>
-                Stop drowning in dense legal jargon. ClauseSpy leverages cutting-edge AI to scan, interpret, and flag critical sections of your legal documents in seconds. Our tool empowers you to understand complex agreements, so you can focus on what truly matters.
-            </p>
-            <p>
-                Identify risks, uncover hidden clauses, and gain the confidence you need before signing. It’s time to trade uncertainty for clarity.
-            </p>
-            
+       
             <!-- This is the updated button, styled as a link, that directs to the upload page -->
             <a href="/upload" class="button">Get Started Now</a>
         </main>
@@ -40,3 +33,38 @@
 '''
 
 
+
+
+'''
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClauseSpy - AI Contract Analysis</title>
+    <!-- This links to your new stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to ClauseSpy</h1>
+        <p>
+            The future of contract analysis is here. Let AI do the heavy lifting, so you can focus on what matters. 
+
+
+                 <h2>Unlock Clarity in Your Contracts, Instantly</h2>
+            <p>
+                Stop drowning in dense legal jargon. ClauseSpy leverages cutting-edge AI to scan, interpret, and flag critical sections of your legal documents in seconds. Our tool empowers you to understand complex agreements, so you can focus on what truly matters.
+            </p>
+            <p>
+                Identify risks, uncover hidden clauses, and gain the confidence you need before signing. It’s time to trade uncertainty for clarity.
+            </p>
+            
+        </p>
+        <a href="/upload" class="button">Get Started</a>
+    </div>
+</body>
+</html>
+'''
