@@ -2,3 +2,6 @@ flask
 python-dotenv
 openai
 gunicorn
+PyPDF2
+
+
