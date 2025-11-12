@@ -1,35 +1,55 @@
-'''
-<!-- templates/upload.html -->
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Contract - ClauseSpy</title>
-    <!-- This links to your stylesheet for consistent design -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>ClauseSpy - Upload Document</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .upload-container {
+            text-align: center;
+            border: 2px dashed #ccc;
+            padding: 40px;
+            border-radius: 10px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Upload Your Contract</h1>
-        <p>
-            Select a PDF document from your device to begin the AI analysis. The system will extract the text and prepare it for review.
-        </p>
 
-        <!-- The form action points to the same page, which is handled by the /upload route in Flask -->
-        <form method="post" enctype="multipart/form-data">
-            <div style="margin-bottom: 2rem;">
-                <!-- 
-                  - 'accept=".pdf"' tells the browser to prefer PDF files, which should fix the greyed-out button.
-                  - A 'required' attribute ensures a file must be selected.
-                -->
-                <input type="file" name="file" accept=".pdf" required>
-            </div>
-            
-            <button type="submit" class="button">Upload and Analyze</button>
+    <div class="upload-container">
+        <h2>Upload a Document for Analysis</h2>
+        <p> Select a PDF document from your device to begin the AI analysis. The system will extract the text and prepare it for review.</p>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" accept=".pdf">
+            <br>
+            <input type="submit" value="Upload">
         </form>
     </div>
+
 </body>
 </html>
-'''
+
+
