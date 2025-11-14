@@ -1,10 +1,11 @@
 flask
-python-dotenv
-openai
+Flask-Login
+Flask-SQLAlchemy
 gunicorn
+openai
+PyMuPDF
+python-dotenv
 PyPDF2
 python-docx
 werkzeug
 Authlib
-Flask-Login
-Flask-SQLAlchemy
