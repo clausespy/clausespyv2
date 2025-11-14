@@ -1,81 +1,51 @@
 
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;ClauseSpy&lt;/title&gt;
-    &lt;style&gt;
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        header h1 {
-            text-align: center;
-        }
-        .hero {
-            background-color: #4a90e2;
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            border-radius: 8px;
-        }
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .cta-button {
-            background-color: #ffffff;
-            color: #4a90e2;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-        .cta-button:hover {
-            background-color: #e8f0fe;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: #666;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;container&quot;&gt;
-        &lt;header&gt;
-            &lt;h1&gt;Welcome to ClauseSpy&lt;/h1&gt;
-        &lt;/header&gt;
 
-        &lt;main class=&quot;hero&quot;&gt;
-            &lt;h2&gt;Unlock Clarity in Your Contracts, Instantly&lt;/h2&gt;
-            &lt;p&gt;Tired of deciphering complex legal jargon? ClauseSpy leverages cutting-edge AI to scan, interpret, and flag critical sections of your legal documents in seconds. Identify risks, uncover hidden clauses, and gain the confidence you need before signing. It's time to trade uncertainty for clarity. Our tool empowers you to understand complex agreements, so you can focus on what truly matters.&lt;/p&gt;
 
-            &lt;form action=&quot;{{ url_for('upload_page') }}&quot; method=&quot;get&quot;&gt;
-                &lt;button type=&quot;submit&quot; class=&quot;cta-button&quot;&gt;Get Started&lt;/button&gt;
-            &lt;/form&gt;
-        &lt;/main&gt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClauseSpy</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f4; color: #333; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { max-width: 800px; text-align: center; padding: 2rem; }
+        header h1 { font-size: 3rem; color: #2c3e50; }
+        .hero h2 { font-size: 2rem; margin-bottom: 1rem; color: #34495e; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; color: #555; }
+        .upload-form { background-color: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .file-input { border: 2px dashed #4a90e2; border-radius: 5px; padding: 3rem; cursor: pointer; transition: background-color 0.3s ease; }
+        .file-input:hover { background-color: #ecf3f9; }
+        input[type="file"] { display: none; }
+        .file-label { color: #4a90e2; font-weight: bold; font-size: 1.2rem; }
+        .cta-button { background-color: #4a90e2; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: background-color 0.3s ease; margin-top: 1.5rem; }
+        .cta-button:hover { background-color: #357bd8; }
+        footer { margin-top: 2rem; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to ClauseSpy</h1>
+        </header>
+        <main class="hero">
+            <h2>Unlock Clarity in Your Contracts, Instantly</h2>
+            <p>Tired of navigating complex legal jargon? ClauseSpy leverages cutting-edge AI to scan, interpret, and flag critical sections of your legal documents in seconds.</p>
+            
+            <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+                <label for="file-upload" class="file-input">
+                    <span class="file-label">Click here to select a document</span>
+                    <br>
+                    <small>(.txt, .pdf, .docx)</small>
+                </label>
+                <input id="file-upload" name="file" type="file" onchange="document.getElementById('submit-btn').style.display='block';">
+                <button id="submit-btn" type="submit" class="cta-button" style="display:none;">Analyze Document</button>
+            </form>
+        </main>
+        <footer class="footer">
+            <p>&copy; 2025 ClauseSpy. Your contracts, demystified.</p>
+        </footer>
+    </div>
+</body>
+</html>
 
-        &lt;footer class=&quot;footer&quot;&gt;
-            &lt;p&gt;&amp;copy; 2025 ClauseSpy. Your contracts, demystified.&lt;/p&gt;
-        &lt;/footer&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
