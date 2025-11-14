@@ -3,6 +3,7 @@ This script runs a Flask web application that provides AI-powered legal analysis
 It is a membership-based application requiring users to log in.
 
 Key features:
+- Landing page for new visitors.
 - User registration, login, and session management.
 - Protected route for document analysis, accessible only to logged-in users.
 - File upload (TXT, PDF, DOCX) and text extraction with error handling.
@@ -15,7 +16,7 @@ To run this application:
     pip install Flask openai PyPDF2 python-docx Flask-Login Flask-SQLAlchemy
 3.  Set your OpenAI API key as an environment variable.
 4.  Run the script: `python app.py`
-    The first time you run it, a `site.db` file will be created for the database.
+    The first time you run it, a `site.db` file will be created.
 '''
 
 import os
@@ -69,6 +70,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def extract_text_from_file(filepath, filename):
+    # This function remains unchanged from before
     ext = filename.rsplit('.', 1)[1].lower()
     text = ''
     try:
@@ -99,8 +101,10 @@ def extract_text_from_file(filepath, filename):
         return None, error_message
 
 def analyze_text_with_openai_json(text, filename):
+    # This function also remains unchanged
     system_prompt = '''
-    You are an expert legal assistant... (rest of your prompt)
+    You are an expert legal assistant. Analyze the provided contract text and return your analysis
+    in a structured JSON format... (etc.)
     '''
     try:
         completion = client.chat.completions.create(
@@ -116,47 +120,19 @@ def analyze_text_with_openai_json(text, filename):
         print(f"Error with OpenAI API or JSON parsing: {e}")
         return {"original_filename": filename, "error": f"The AI model failed to analyze the document. Error: {str(e)}"}
 
-# --- Authentication Routes ---
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    if request.method == 'POST':
-        user = User.query.filter_by(email=request.form['email']).first()
-        if user and user.check_password(request.form['password']):
-            login_user(user)
-            return redirect(url_for('home'))
-        else:
-            flash('Invalid email or password.')
-    return render_template('login.html')
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    if request.method == 'POST':
-        if User.query.filter_by(email=request.form['email']).first():
-            flash('Email address already registered.')
-            return redirect(url_for('register'))
-        new_user = User(username=request.form['username'], email=request.form['email'])
-        new_user.set_password(request.form['password'])
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Thanks for registering! Please log in.')
-        return redirect(url_for('login'))
-    return render_template('register.html')
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
-
-# --- Main Application Routes ---
+# --- Main Application and Authentication Routes ---
 @app.route('/')
-@login_required
 def home():
-    return render_template('index.html')
+    """
+    Renders the landing page for logged-out users and the main app
+    page for authenticated users.
+    """
+    if current_user.is_authenticated:
+        # If user is logged in, show them the file uploader (index.html)
+        return render_template('index.html')
+    else:
+        # If user is not logged in, show them the marketing landing page
+        return render_template('landing.html')
 
 @app.route('/upload', methods=['POST'])
 @login_required
@@ -190,6 +166,41 @@ def upload_page():
             os.remove(filepath)
 
     return render_template('result.html', analysis=analysis_data)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        user = User.query.filter_by(email=request.form['email']).first()
+        if user and user.check_password(request.form['password']):
+            login_user(user)
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid email or password.')
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        if User.query.filter_by(email=request.form['email']).first():
+            flash('Email address already registered.')
+            return redirect(url_for('register'))
+        new_user = User(username=request.form['username'], email=request.form['email'])
+        new_user.set_password(request.form['password'])
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Thanks for registering! Please log in.')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     with app.app_context():
