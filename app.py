@@ -1,84 +1,101 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+import uuid
 
-# 1. Initialize the Flask App
+# --- App and Login Manager Setup ---
 app = Flask(__name__)
-# You must set a secret key for session management
 app.config['SECRET_KEY'] = 'a-super-secret-key-that-you-should-change' 
 
-# 2. Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-# If a user tries to access a page that requires a login, redirect them here
-login_manager.login_view = 'index' 
+# If a user tries to access a page that requires a login, redirect them to the 'login' page
+login_manager.login_view = 'login' 
 
-# 3. Create a User Model
-# This is a simple User class. In a real app, this would come from a database.
+# --- User Model and In-Memory Database ---
 class User(UserMixin):
     def __init__(self, id, username, password):
         self.id = id
         self.username = username
         self.password = password
 
-# Simple in-memory user database.
-users_db = {
-    "1": User(id="1", username="testuser", password="password123")
-}
+# Using a dictionary to act as a simple in-memory database
+users_db = {}
 
-# 4. Create a user_loader function
+# --- User Loader ---
 @login_manager.user_loader
 def load_user(user_id):
-    """Loads a user object from the user ID stored in the session."""
+    """Loads a user from our 'database'"""
     return users_db.get(user_id)
 
-# 5. Update Routes
+# --- Routes ---
 @app.route('/')
 def index():
-    """Renders the home/login page."""
-    # The template now handles showing the login form or the welcome message
+    """Renders the main landing page."""
     return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Handles the user login form submission."""
-    username = request.form['username']
-    password = request.form['password']
-    
-    # Find the user
-    user = None
-    for u in users_db.values():
-        if u.username == username:
-            user = u
-            break
-            
-    # Check if user exists and password is correct
-    if user and user.password == password:
-        login_user(user) # This function handles the session
+    """Handles user login on its own page."""
+    if current_user.is_authenticated:
         return redirect(url_for('index'))
-    else:
-        # If login fails, you can redirect back to index or show an error
-        return redirect(url_for('index')) 
 
-@app.route('/register')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        user = None
+        for u in users_db.values():
+            if u.username == username:
+                user = u
+                break
+            
+        if user and user.password == password:
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid username or password.')
+            
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    """Renders the registration page."""
-    # This route just shows the registration page. You would add POST logic
-    # to handle the form submission and add a new user to your database.
+    """Handles new user registration on its own page."""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+        
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Check if username already exists
+        if any(u.username == username for u in users_db.values()):
+            flash('Username already exists. Please choose a different one.')
+            return redirect(url_for('register'))
+
+        # Create new user and add to our 'database'
+        new_id = str(uuid.uuid4())
+        new_user = User(id=new_id, username=username, password=password)
+        users_db[new_id] = new_user
+        
+        flash('Registration successful! Please log in.')
+        return redirect(url_for('login'))
+
     return render_template('register.html')
 
 @app.route('/logout')
-@login_required # Ensures only logged-in users can access this
+@login_required
 def logout():
     """Logs the current user out."""
     logout_user()
     return redirect(url_for('index'))
 
 @app.route('/upload')
-@login_required # Protect this page so only logged-in users can see it
+@login_required
 def upload_form():
-    """Shows the file upload page."""
-    # You would create an 'upload.html' template for this.
-    return "<h1>Upload Page</h1><p>Welcome, you are logged in!</p>"
+    """A protected page for logged-in users."""
+    # This corresponds to your 'Get Started' button's action for logged-in users.
+    # You will need to create 'upload.html' for this to be useful.
+    return "<h1>Upload Your Contract</h1><p>You are logged in as {{ current_user.username }}.</p>"
 
 if __name__ == '__main__':
     app.run(debug=True)
