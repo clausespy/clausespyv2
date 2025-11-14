@@ -3,50 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClauseSpy</title>
+    <title>ClauseSpy - AI Contract Analysis</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fff; color: #333; margin: 0; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 100vh; }
-        .container { max-width: 600px; }
-        h1 { font-size: 2.5rem; font-weight: 600; color: #000; }
-        h2 { font-size: 1.5rem; font-weight: 500; color: #444; margin-top: -1rem; margin-bottom: 2rem; }
-        p { color: #555; line-height: 1.6; margin-bottom: 3rem; }
-        .upload-area { border: 2px dashed #d0d0d0; border-radius: 12px; padding: 2rem; width: 80%; margin: 0 auto; }
-        input[type="file"] { display: none; }
-        .file-label {
-            display: block;
-            background-color: #007aff;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease;
-            cursor: pointer;
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
         }
-        .file-label:hover { background-color: #0056b3; }
-        .footer { margin-top: auto; padding-top: 2rem; font-size: 0.8rem; color: #888; }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2em;
+        }
+        h1 {
+            font-size: 2.8em;
+            font-weight: 500;
+            margin-bottom: 0.2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            font-weight: 300;
+            color: #495057;
+            margin-bottom: 1.5em;
+        }
+        p {
+            max-width: 550px;
+            line-height: 1.6;
+            color: #6c757d;
+            margin-bottom: 2.5em;
+        }
+        .get-started-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .get-started-btn:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            padding: 1.5em;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to ClauseSpy</h1>
-        <h2>Unlock Clarity in Your Contracts, Instantly.</h2>
-        <p>
-            Tired of navigating complex legal jargon? ClauseSpy leverages cutting-edge AI to scan,
-            interpret, and flag critical sections of your legal documents in seconds.
-        </p>
+    <div class="wrapper">
+        <div class="container">
+            <h1>Welcome to ClauseSpy</h1>
+            <h2>Unlock Clarity in Your Contracts, Instantly.</h2>
+            <p>
+                Tired of navigating complex legal jargon? ClauseSpy leverages cutting-edge AI to scan,
+                interpret, and flag critical sections of your legal documents in seconds. It's
+                time to trade uncertainty for clarity.
+            </p>
+            <a href="{{ url_for('login') }}" class="get-started-btn">Get Started</a>
+        </div>
 
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <div class="upload-area">
-                <label for="file" class="file-label">Click here to select a document</label>
-                <input type="file" name="file" id="file" onchange="this.form.submit()">
-            </div>
-        </form>
-    </div>
-
-    <div class="footer">
-        &copy; 2025 ClauseSpy. Your contracts, demystified.
+        <div class="footer">
+            &copy; 2025 ClauseSpy. Your contracts, demystified.
+        </div>
     </div>
 </body>
 </html>
