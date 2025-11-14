@@ -2,23 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login - ClauseSpy</title>
+    <!-- Add your CSS styles here or link to a stylesheet -->
+    <style>
+        /* Using similar styles for consistency */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .form-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h1 { margin-bottom: 2em; }
+        .form-group { margin-bottom: 1.5em; text-align: left; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
+        .flash-message { padding: 1em; margin-bottom: 1em; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px; }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
-    <form action="{{ url_for('login') }}" method="post">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-    <p>
-        Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.
-    </p>
+    <div class="form-container">
+        <h1>Login to ClauseSpy</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p style="margin-top: 2em;">Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+    </div>
 </body>
 </html>
