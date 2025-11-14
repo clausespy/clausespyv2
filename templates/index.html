@@ -19,6 +19,18 @@
             min-height: 100vh;
             text-align: center;
         }
+        .user-header {
+            width: 100%;
+            padding: 10px 20px;
+            text-align: right;
+            box-sizing: border-box;
+            background-color: #f8f9fa; /* Match body */
+        }
+        .user-header a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
         .container {
             flex-grow: 1;
             display: flex;
@@ -68,6 +80,10 @@
 </head>
 <body>
     <div class="wrapper">
+        <div class="user-header">
+             <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+        </div>
+
         <div class="container">
             <h1>Welcome to ClauseSpy</h1>
             <h2>Unlock Clarity in Your Contracts, Instantly.</h2>
@@ -76,7 +92,8 @@
                 interpret, and flag critical sections of your legal documents in seconds. It's
                 time to trade uncertainty for clarity.
             </p>
-            <a href="{{ url_for('login') }}" class="get-started-btn">Get Started</a>
+            <!-- This button now links to the UPLOAD page -->
+            <a href="{{ url_for('upload_form') }}" class="get-started-btn">Get Started</a>
         </div>
 
         <div class="footer">
