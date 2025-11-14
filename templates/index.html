@@ -24,7 +24,7 @@
             padding: 10px 20px;
             text-align: right;
             box-sizing: border-box;
-            background-color: #f8f9fa; /* Match body */
+            background-color: #f8f9fa;
         }
         .user-header a {
             color: #007bff;
@@ -76,29 +76,79 @@
             color: #6c757d;
             font-size: 0.9em;
         }
+        /* Styles for the new login form */
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <div class="user-header">
-             <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
-        </div>
 
-        <div class="container">
-            <h1>Welcome to ClauseSpy</h1>
-            <h2>Unlock Clarity in Your Contracts, Instantly.</h2>
-            <p>
-                Tired of navigating complex legal jargon? ClauseSpy leverages cutting-edge AI to scan,
-                interpret, and flag critical sections of your legal documents in seconds. It's
-                time to trade uncertainty for clarity.
-            </p>
-            <!-- This button now links to the UPLOAD page -->
-            <a href="{{ url_for('upload_form') }}" class="get-started-btn">Get Started</a>
-        </div>
+        {% if current_user.is_authenticated %}
+            <!-- This section is shown ONLY to logged-in users -->
+            <div class="user-header">
+                <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+            </div>
+
+            <div class="container">
+                <h1>Welcome to ClauseSpy</h1>
+                <h2>Unlock Clarity in Your Contracts, Instantly.</h2>
+                <p>
+                    Tired of navigating complex legal jargon? ClauseSpy leverages cutting-edge AI to scan,
+                    interpret, and flag critical sections of your legal documents in seconds. It's
+                    time to trade uncertainty for clarity.
+                </p>
+                <a href="{{ url_for('upload_form') }}" class="get-started-btn">Get Started</a>
+            </div>
+
+        {% else %}
+            <!-- This section is shown ONLY to logged-out users -->
+            <div class="user-header">
+                <a href="{{ url_for('register') }}">Register</a>
+            </div>
+
+            <div class="container">
+                <h1>Welcome to ClauseSpy</h1>
+                <h2>Please log in to get started.</h2>
+                
+                <!-- Login Form -->
+                <form action="{{ url_for('login') }}" method="post" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="get-started-btn" style="width: 100%;">Login</button>
+                </form>
+            </div>
+            
+        {% endif %}
 
         <div class="footer">
             &copy; 2025 ClauseSpy. Your contracts, demystified.
         </div>
+
     </div>
 </body>
 </html>
