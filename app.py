@@ -1,18 +1,21 @@
 import os
 import uuid
-import json # Import the json library
+import json
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate  # 1. IMPORT MIGRATE
 import fitz  # PyMuPDF
 import openai
 
 # --- App and Database Setup ---
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'a-super-secret-key-that-you-should-change'
+# Use environment variables for production secrets and configurations
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a-default-secret-key-for-development')
 app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+# Use DATABASE_URL from environment if available (common on Render), otherwise fall back to local sqlite
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -21,9 +24,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+# --- Flask-Migrate Initialization ---
+# 2. INITIALIZE MIGRATE AFTER APP AND DB
+migrate = Migrate(app, db)
+
 # --- OpenAI API Key ---
-# IMPORTANT: Replace "your-openai-api-key" with your actual OpenAI API key
-openai.api_key = "your-openai-api-key"
+# Best practice: Load API key from an environment variable
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # --- User Model ---
 class User(UserMixin, db.Model):
@@ -49,7 +56,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('upload_page')) # Redirect to upload page if already logged in
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -64,7 +71,7 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('upload_page'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -133,7 +140,7 @@ def analyze_contract():
             '''
             
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo-1106", # A model that supports JSON mode
+                model="gpt-3.5-turbo-1106",
                 response_format={ "type": "json_object" },
                 messages=[
                     {"role": "system", "content": system_prompt},
@@ -163,12 +170,9 @@ def results_page(task_id):
     analysis = analysis_results.get(task_id, {"error": "Analysis not found.", "original_filename": "Unknown"})
     return render_template('results.html', analysis=analysis)
 
+# 3. REMOVED the db.create_all() block from here.
+# This part of the code is only for running the app locally with `python app.py`
+# A production server like Gunicorn will run the app differently.
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        if not User.query.filter_by(username='leigh').first():
-            admin_user = User(username='leigh')
-            admin_user.set_password('your_password') # Change this password
-            db.session.add(admin_user)
-            db.session.commit()
     app.run(debug=True)
+
