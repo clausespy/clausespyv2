@@ -3,95 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClauseSpy - Upload Document</title>
+    <title>Upload Document - ClauseSpy</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f8f9fa;
-        }
-        .upload-container {
-            text-align: center;
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        h2 {
-            margin-top: 0;
-        }
-        #file-upload {
-            display: none;
-        }
-        .file-upload-label {
-            display: inline-block;
-            padding: 10px 20px;
-            border: 1px solid #ccc;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .file-upload-label:hover {
-            background-color: #e9e9e9;
-        }
-        #file-name {
-            color: #555;
-        }
-        #submit-button {
-            padding: 12px 24px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
-            transition: background-color 0.2s;
-        }
-        #submit-button:hover {
-            background-color: #0056b3;
-        }
-        #submit-button:disabled {
-            background-color: #a0cfff;
-            cursor: not-allowed;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        .user-header { width: 100%; padding: 10px 20px; text-align: right; box-sizing: border-box; }
+        .user-header a { color: #007bff; text-decoration: none; font-weight: 500; }
+        .container { text-align: center; padding: 2em; margin-top: 5em; }
+        .upload-area { border: 2px dashed #ccc; border-radius: 10px; padding: 40px; }
+        .file-label { display: inline-block; padding: 12px 20px; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; }
+        input[type="file"] { display: none; }
+        #file-name { margin-top: 15px; font-style: italic; color: #6c757d; }
+        .submit-btn { background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 12px 30px; margin-top: 20px; font-size: 1em; cursor: pointer; display: none; /* Hidden by default */ }
     </style>
 </head>
 <body>
 
-    <div class="upload-container">
+    <div class="user-header">
+         <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+    </div>
+
+    <div class="container">
         <h2>Upload a Document for Analysis</h2>
-        <p>Select a PDF document from your device to begin the AI analysis.</p>
+        <p>Select a TXT, PDF, or DOCX file from your device.</p>
         
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <label for="file-upload" class="file-upload-label">Choose File</label>
-            <span id="file-name">No file selected</span>
-            <!-- The 'accept' attribute is now more specific -->
-            <input type="file" name="file" id="file-upload" accept="application/pdf">
-            
-            <br>
-            
-            <input type="submit" value="Upload" id="submit-button" disabled>
+        <!-- The form now posts to the 'handle_upload' function -->
+        <form action="{{ url_for('handle_upload') }}" method="post" enctype="multipart/form-data">
+            <div class="upload-area">
+                <label for="file" class="file-label">Choose File</label>
+                <input type="file" name="file" id="file" accept=".txt,.pdf,.docx" required>
+                <div id="file-name">No file selected</div>
+            </div>
+            <button type="submit" id="submit-button" class="submit-btn">Analyze Document</button>
         </form>
     </div>
 
     <script>
-        const fileInput = document.getElementById('file-upload');
-        const fileNameSpan = document.getElementById('file-name');
+        const fileInput = document.getElementById('file');
+        const fileNameDisplay = document.getElementById('file-name');
         const submitButton = document.getElementById('submit-button');
 
         fileInput.addEventListener('change', function() {
             if (this.files.length > 0) {
-                fileNameSpan.textContent = this.files[0].name;
-                submitButton.disabled = false;
+                // Show the file name in the "small box"
+                fileNameDisplay.textContent = this.files[0].name;
+                // Show the submit button
+                submitButton.style.display = 'block';
             } else {
-                fileNameSpan.textContent = 'No file selected';
-                submitButton.disabled = true;
+                fileNameDisplay.textContent = 'No file selected';
+                submitButton.style.display = 'none';
             }
         });
     </script>
