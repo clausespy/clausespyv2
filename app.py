@@ -1,5 +1,6 @@
 import os
 import uuid
+import json # Import the json library
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -109,42 +110,62 @@ def analyze_contract():
         file.save(file_path)
 
         try:
-            # Extract text from PDF
             doc = fitz.open(file_path)
             text = ""
             for page in doc:
                 text += page.get_text()
             doc.close()
 
-            # Call OpenAI API
+            system_prompt = '''
+            You are a legal contract analyzer. Analyze the provided contract text and return a JSON object with the following structure:
+            {
+              "overall_risk": "Low", "Medium", or "High",
+              "opportunities_found": "A brief summary of any opportunities or benefits for the user.",
+              "risk_breakdown": [
+                {
+                  "title": "Clause Title",
+                  "risk_level": "Low", "Medium", or "High",
+                  "description": "A summary of the clause and why it represents that level of risk."
+                }
+              ]
+            }
+            Do not include any text outside of the JSON object.
+            '''
+            
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo-1106", # A model that supports JSON mode
+                response_format={ "type": "json_object" },
                 messages=[
-                    {"role": "system", "content": "You are a helpful legal assistant. Analyze the following contract and provide a summary of key clauses."},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": text}
                 ]
             )
-            analysis = response.choices[0].message.content
-
+            
+            analysis_data = json.loads(response.choices[0].message.content)
+            analysis_data['original_filename'] = filename
+            
             task_id = str(uuid.uuid4())
-            analysis_results[task_id] = analysis
+            analysis_results[task_id] = analysis_data
             
             return redirect(url_for('results_page', task_id=task_id))
 
         except Exception as e:
-            flash(f'An error occurred during analysis: {e}')
-            return redirect(url_for('upload_page'))
+            task_id = str(uuid.uuid4())
+            analysis_results[task_id] = {
+                "error": f"An error occurred during analysis: {e}",
+                "original_filename": filename
+            }
+            return redirect(url_for('results_page', task_id=task_id))
 
 @app.route('/results/<task_id>')
 @login_required
 def results_page(task_id):
-    result = analysis_results.get(task_id, "Analysis not found.")
-    return render_template('results.html', result=result)
+    analysis = analysis_results.get(task_id, {"error": "Analysis not found.", "original_filename": "Unknown"})
+    return render_template('results.html', analysis=analysis)
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        # Add the admin user if they don't exist
         if not User.query.filter_by(username='leigh').first():
             admin_user = User(username='leigh')
             admin_user.set_password('your_password') # Change this password
