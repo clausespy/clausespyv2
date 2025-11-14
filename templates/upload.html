@@ -3,57 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Document - ClauseSpy</title>
+    <title>Upload Contract - ClauseSpy</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        body, html { height: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #343a40; }
+        .wrapper { display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; text-align: center; }
         .user-header { width: 100%; padding: 10px 20px; text-align: right; box-sizing: border-box; }
         .user-header a { color: #007bff; text-decoration: none; font-weight: 500; }
-        .container { text-align: center; padding: 2em; margin-top: 5em; }
-        .upload-area { border: 2px dashed #ccc; border-radius: 10px; padding: 40px; }
-        .file-label { display: inline-block; padding: 12px 20px; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; }
-        input[type="file"] { display: none; }
-        #file-name { margin-top: 15px; font-style: italic; color: #6c757d; }
-        .submit-btn { background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 12px 30px; margin-top: 20px; font-size: 1em; cursor: pointer; display: none; /* Hidden by default */ }
+        .container { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2em; }
+        h1 { font-size: 2.5em; font-weight: 500; margin-bottom: 1em; }
+        .upload-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        .file-input-wrapper { margin-bottom: 1.5em; }
+        input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; }
+        .analyze-btn { background-color: #007bff; color: white; border: none; border-radius: 8px; padding: 15px 35px; font-size: 1.1em; font-weight: 500; text-decoration: none; cursor: pointer; transition: background-color 0.2s; width: 100%; }
+        .analyze-btn:hover { background-color: #0056b3; }
+        .footer { padding: 1.5em; color: #6c757d; font-size: 0.9em; }
+        .flash-message { padding: 1em; margin: 1em 0; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; }
     </style>
 </head>
 <body>
+    <div class="wrapper">
+        <div class="user-header">
+            Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
 
-    <div class="user-header">
-         <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
-    </div>
+        <div class="container">
+            <div class="upload-box">
+                <h1>Upload Your Contract</h1>
 
-    <div class="container">
-        <h2>Upload a Document for Analysis</h2>
-        <p>Select a TXT, PDF, or DOCX file from your device.</p>
-        
-        <!-- The form now posts to the 'handle_upload' function -->
-        <form action="{{ url_for('handle_upload') }}" method="post" enctype="multipart/form-data">
-            <div class="upload-area">
-                <label for="file" class="file-label">Choose File</label>
-                <input type="file" name="file" id="file" accept=".txt,.pdf,.docx" required>
-                <div id="file-name">No file selected</div>
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <div class="flash-message">
+                      {{ messages[0] }}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('analyze_contract') }}" method="post" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <input type="file" name="contract_file" required>
+                    </div>
+                    <button type="submit" class="analyze-btn">Analyze Contract</button>
+                </form>
             </div>
-            <button type="submit" id="submit-button" class="submit-btn">Analyze Document</button>
-        </form>
+        </div>
+
+        <div class="footer">
+            &copy; 2025 ClauseSpy. Your contracts, demystified.
+        </div>
     </div>
-
-    <script>
-        const fileInput = document.getElementById('file');
-        const fileNameDisplay = document.getElementById('file-name');
-        const submitButton = document.getElementById('submit-button');
-
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                // Show the file name in the "small box"
-                fileNameDisplay.textContent = this.files[0].name;
-                // Show the submit button
-                submitButton.style.display = 'block';
-            } else {
-                fileNameDisplay.textContent = 'No file selected';
-                submitButton.style.display = 'none';
-            }
-        });
-    </script>
-
 </body>
 </html>
