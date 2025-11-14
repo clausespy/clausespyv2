@@ -102,7 +102,7 @@
 <body>
     <div class="wrapper">
 
-        {% if current_user.is_authenticated %}
+        {% if current_user and current_user.is_authenticated %}
             <!-- This section is shown ONLY to logged-in users -->
             <div class="user-header">
                 <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
