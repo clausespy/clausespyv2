@@ -46,16 +46,25 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'docx'}
 
 # --- Database Model ---
+# The IndentationError was likely here. Note the four spaces before each line.
 class User(UserMixin, db.Model):
+    # This line must be indented
     id = db.Column(db.Integer, primary_key=True)
+    # This line must be indented
     username = db.Column(db.String(80), unique=True, nullable=False)
+    # This line must be indented
     email = db.Column(db.String(120), unique=True, nullable=False)
+    # This line must be indented
     password_hash = db.Column(db.String(128))
 
+    # This function and its contents must also be indented
     def set_password(self, password):
+        # This line must be indented further
         self.password_hash = generate_password_hash(password)
 
+    # This function and its contents must also be indented
     def check_password(self, password):
+        # This line must be indented further
         return check_password_hash(self.password_hash, password)
 
 @login_manager.user_loader
