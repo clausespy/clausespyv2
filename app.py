@@ -105,7 +105,7 @@ def analyze_text_with_openai_json(text, filename):
     
     try:
         completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             response_format={"type": "json_object"},  # Force JSON output
             messages=[
                 {"role": "system", "content": system_prompt},
