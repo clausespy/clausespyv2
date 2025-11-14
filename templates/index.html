@@ -38,7 +38,6 @@
                 time to trade uncertainty for clarity.
             </p>
             {% if current_user.is_authenticated %}
-                <!-- THE FIX IS ON THIS LINE -->
                 <a href="{{ url_for('upload_page') }}" class="get-started-btn">Get Started</a>
             {% else %}
                 <a href="{{ url_for('register') }}" class="get-started-btn">Get Started</a>
