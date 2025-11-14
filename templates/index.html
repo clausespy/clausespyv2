@@ -1,43 +1,32 @@
 
-'''
-Filename: templates/index.html
-'''
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClauseSpy - Home</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; text-align: center; margin-top: 100px; }
-        a { text-decoration: none; background-color: #007bff; color: white; padding: 15px 30px; border-radius: 5px; }
-        a:hover { background-color: #0056b3; }
-    </style>
+    <title>Welcome to ClauseSpy</title>
+    <!-- You can add your CSS styles here or in a separate file -->
 </head>
 <body>
+    <h1>Welcome to ClauseSpy</h1>
+    <p>The future of contract analysis is here. Let AI do the heavy lifting, so you can focus on what matters.</p>
+    
+    <h2>Unlock Clarity in Your Contracts, Instantly</h2>
+    <p>Tired of deciphering complex legal jargon? ClauseSpy leverages cutting-edge AI to scan, interpret, and flag critical sections of your legal documents in seconds. Identify risks, uncover hidden clauses, and gain the confidence you need before signing. It's time to trade uncertainty for clarity. Our tool empowers you to understand complex agreements, so you can focus on what truly matters.</p>
 
-      <h1>Welcome to ClauseSpy</h1>
-        <p>
-            The future of contract analysis is here. Let AI do the heavy lifting, so you can focus on what matters. 
+    <!-- 
+      This is a standard HTML form. When the button is clicked, it will
+      navigate the user to the '/upload' URL defined in your Flask app.
+    -->
+    <form action="{{ url_for('upload_page') }}" method="get">
+        <button type="submit">Get Started</button>
+    </form>
 
-
-                 <h2>Unlock Clarity in Your Contracts, Instantly</h2>
-            <p>
-                Stop drowning in dense legal jargon. ClauseSpy leverages cutting-edge AI to scan, interpret, and flag critical sections of your legal documents in seconds. Our tool empowers you to understand complex agreements, so you can focus on what truly matters.
-            </p>
-            <p>
-                Identify risks, uncover hidden clauses, and gain the confidence you need before signing. It’s time to trade uncertainty for clarity.
-            </p>
-            
-        </p>
-        <a href="/upload" class="button">Get Started</a>
-
-          <footer>
-            <p>&copy; 2025 ClauseSpy. Your contracts, demystified.</p>
-        </footer>
-
-
- 
+    <footer>
+        <p>&copy; 2025 ClauseSpy. Your contracts, demystified.</p>
+    </footer>
 </body>
 </html>
+
