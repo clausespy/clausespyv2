@@ -175,4 +175,3 @@ def results_page(task_id):
 # A production server like Gunicorn will run the app differently.
 if __name__ == '__main__':
     app.run(debug=True)
-
