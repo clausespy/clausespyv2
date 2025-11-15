@@ -10,3 +10,4 @@ python-docx
 werkzeug
 Authlib
 Flask-Migrate
+Flask-Admin
